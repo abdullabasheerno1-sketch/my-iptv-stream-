@@ -1,5 +1,6 @@
 const express = require('express');
-const request = require('request');
+const http = require('http');
+const https = require('https');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
@@ -10,16 +11,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/stream.m3u8', (req, res) => {
-    req.socket.setTimeout(10 * 60 * 1000);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/vnd.apple.mpegurl');
-    
-    request({
-        url: TARGET_STREAM,
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-        }
-    }).pipe(res);
+
+    const client = TARGET_STREAM.startsWith('https') ? https : http;
+
+    client.get(TARGET_STREAM, (streamRes) => {
+        streamRes.pipe(res);
+    }).on('error', (err) => {
+        res.status(500).send('Stream error: ' + err.message);
+    });
 });
 
 app.listen(PORT, () => {
