@@ -1,7 +1,7 @@
 {
-  "name": "my-stream-proxy",
+  "name": "iptv-proxy",
   "version": "1.0.0",
-  "description": "IPTV Proxy Stream",
+  "description": "IPTV Stream Proxy",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
