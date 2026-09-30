@@ -3,6 +3,7 @@ const request = require('request');
 const app = express();
 
 const TARGET_STREAM = 'http://raztv.online/live/MAGNL39E26/hvhS6xsuZP/1339214.m3u8';
+const PORT = process.env.PORT || 3000;
 
 app.get('/stream.m3u8', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,4 +17,6 @@ app.get('/stream.ts', (req, res) => {
     req.pipe(request(TARGET_STREAM)).pipe(res);
 });
 
-module.exports = app;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
